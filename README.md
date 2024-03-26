@@ -1,2 +1,2 @@
 # Thread-safe structures for parallel executions
-Controlled access test to a resource.
+Controlled access tests to resources.
