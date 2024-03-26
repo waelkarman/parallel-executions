@@ -10,7 +10,7 @@ add_executable(sync_vector
     sync_vector.cpp
 )
 
-add_executable(sync_seqential_execution
+add_executable(sync_sequential_execution
     sync_sequential_execution.cpp
 )
 
@@ -27,7 +27,7 @@ install(TARGETS synch_threads
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(TARGETS sync_seqential_execution
+install(TARGETS sync_sequential_execution
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
