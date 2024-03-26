@@ -7,9 +7,9 @@
 using namespace std;
 /**
  *
- * Synchronisation between threads respects the RAII (Resource Acquisition Is Initialisation) principle.
  *
- * std::lock_guard ensures thread safety, using a single mutex for each operation can become a performance bottleneck with a high number of threads concurrently accessing the resource.
+ *
+ *
  *
 */
 
