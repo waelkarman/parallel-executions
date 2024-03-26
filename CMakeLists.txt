@@ -14,6 +14,10 @@ add_executable(sync_sequential_execution
     sync_sequential_execution.cpp
 )
 
+add_executable(sync_schedule_thread
+    sync_schedule_thread.cpp
+)
+
 add_executable(synch_threads
     sync_threads.cpp
 )
@@ -28,6 +32,10 @@ install(TARGETS synch_threads
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(TARGETS sync_sequential_execution
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(TARGETS sync_schedule_thread
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
