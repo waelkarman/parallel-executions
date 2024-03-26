@@ -55,10 +55,10 @@ void decr1000(ts_vector& p){
 int main() {
     ts_vector v;
 
-    std::thread t0(incr1000,std::ref(v),1);
-    std::thread t1(decr1000,std::ref(v));
-    std::thread t2(incr1000,std::ref(v),1);
-    std::thread t3(decr1000,std::ref(v));
+    thread t0(incr1000,std::ref(v),1);
+    thread t1(decr1000,std::ref(v));
+    thread t2(incr1000,std::ref(v),1);
+    thread t3(decr1000,std::ref(v));
 
     t0.join();
     t1.join();

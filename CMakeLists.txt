@@ -6,10 +6,20 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
-add_executable(ts_vector sync_vector.cpp)
+add_executable(sync_vector
+    sync_vector.cpp
+)
+
+add_executable(synch_threads
+    sync_threads.cpp
+)
 
 include(GNUInstallDirs)
-install(TARGETS ts_vector
+install(TARGETS sync_vector
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(TARGETS synch_threads
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
