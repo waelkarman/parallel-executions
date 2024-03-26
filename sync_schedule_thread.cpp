@@ -5,6 +5,7 @@
 * Overload a single core.
 * Code for Linux
 * Use htop to check core affinity
+* Ref: https://linux.die.net/man/3/cpu_zero
 */
 
 unsigned long long fibonacci_recursive(int n) {
