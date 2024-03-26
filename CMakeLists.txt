@@ -11,7 +11,7 @@ add_executable(sync_vector
 )
 
 add_executable(sync_seqential_execution
-    sync_seqential_execution.cpp
+    sync_sequential_execution.cpp
 )
 
 add_executable(synch_threads
