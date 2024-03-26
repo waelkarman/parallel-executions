@@ -4,7 +4,7 @@
 /*
 * Overload a single core.
 * Code for Linux
-*
+* Use htop to check core affinity
 */
 
 unsigned long long fibonacci_recursive(int n) {
@@ -25,7 +25,7 @@ int main() {
     pthread_create(&thread, NULL, &threadFunction, NULL);
 
     CPU_ZERO(&cpuset);
-    CPU_SET(1, &cpuset);
+    CPU_SET(2, &cpuset);
     printf("Num core that will serve the task: %d\n",CPU_COUNT(&cpuset));
 
     int result = pthread_setaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
