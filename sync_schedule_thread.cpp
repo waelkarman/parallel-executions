@@ -1,5 +1,7 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <iostream>
+#include <thread>
 #include "timer.hpp"
 
 /*
@@ -41,8 +43,10 @@ void threadlauncher(int cpunum){
 
 
 int main() {
+    unsigned int n = std::thread::hardware_concurrency();
+    std::cout << "Available Cores: " << n << std::endl;
 
-    for(int i; i<20; i++){
+    for(int i; i<n; i++){
         threadlauncher(i);
     }
 
