@@ -4,7 +4,7 @@
 
 /*
 * Overload a single core.
-* test NUMA Arch
+* test NUMA arch & asymmetric Cores design
 * Code for Linux
 * Use htop to check core affinity
 * Ref: https://linux.die.net/man/3/cpu_zero
