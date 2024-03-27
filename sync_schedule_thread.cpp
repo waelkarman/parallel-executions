@@ -21,44 +21,30 @@ void* threadFunction(void* arg) {
     return (void*)res;
 }
 
-int main() {
-    pthread_t thread0;
-    pthread_t thread1;
+void threadlauncher(int cpunum){
+    pthread_t thread;
     cpu_set_t cpuset;
-    int cpunum = 0;
-
-    // TEST CORE 0
     printf("Set CPU %d\n",cpunum);
 
-    pthread_create(&thread0, NULL, &threadFunction, NULL);
+    pthread_create(&thread, NULL, &threadFunction, NULL);
 
     CPU_ZERO(&cpuset);
     CPU_SET(cpunum, &cpuset);
 
-    int result0 = pthread_setaffinity_np(thread0, sizeof(cpu_set_t), &cpuset);
+    int result0 = pthread_setaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
     if (result0 != 0) {
         perror("Error");
     }
 
-    pthread_join(thread0, NULL);
+    pthread_join(thread, NULL);
+}
 
 
-    // TEST CORE 18
-    cpunum = 18;
-    printf("Set CPU %d\n",cpunum);
+int main() {
 
-    pthread_create(&thread1, NULL, &threadFunction, NULL);
-
-    CPU_ZERO(&cpuset);
-    CPU_SET(cpunum, &cpuset);
-
-    int result1 = pthread_setaffinity_np(thread1, sizeof(cpu_set_t), &cpuset);
-    if (result1 != 0) {
-        perror("Error");
+    for(int i; i<20; i++){
+        threadlauncher(i);
     }
-
-    pthread_join(thread1, NULL);
-
 
     return 0;
 }

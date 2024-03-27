@@ -5,6 +5,7 @@
 #include <condition_variable>
 
 using namespace std;
+
 /**
  *
  *
@@ -13,11 +14,11 @@ using namespace std;
  *
 */
 
-std::mutex mtx;
-std::condition_variable cv;
+mutex mtx;
+condition_variable cv;
 bool ready = false;
 void parallel_op(int id){
-    std::unique_lock<std::mutex> lock(mtx);
+    unique_lock<std::mutex> lock(mtx);
     cv.wait(lock, []{
         return ready;
     });
@@ -27,7 +28,7 @@ void parallel_op(int id){
 }
 
 void startThread() {
-    std::lock_guard<std::mutex> lock(mtx);
+    lock_guard<std::mutex> lock(mtx);
     ready = true;
     cv.notify_one();
 }
