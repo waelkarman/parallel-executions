@@ -35,15 +35,15 @@ target_include_directories(timer PUBLIC
 
 include(GNUInstallDirs)
 
-install(TARGETS synch_threads
+install(TARGETS sync_threads_all
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(TARGETS sync_sequential_execution
+install(TARGETS sync_threads_one
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(TARGETS sync_schedule_thread
+install(TARGETS sync_schedule_threads
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
