@@ -6,17 +6,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
-set(HEADERS
-    timer.hpp
-)
-
-add_library(timer SHARED ${HEADERS})
+add_library(timer SHARED timer.hpp)
+add_library(ts_vector SHARED ts_vector.hpp)
 
 set_target_properties(timer PROPERTIES LINKER_LANGUAGE CXX)
-
-add_executable(sync_vector
-    sync_vector.cpp
-)
+set_target_properties(ts_vector PROPERTIES LINKER_LANGUAGE CXX)
 
 add_executable(sync_sequential_execution
     sync_sequential_execution.cpp
@@ -24,6 +18,11 @@ add_executable(sync_sequential_execution
 
 add_executable(sync_schedule_thread
     sync_schedule_thread.cpp
+)
+
+add_executable(scalable_task_processing
+    scalable_task_processing.cpp
+    task_scaler.h task_scaler.cpp
 )
 
 add_executable(synch_threads
@@ -35,10 +34,7 @@ target_include_directories(timer PUBLIC
 )
 
 include(GNUInstallDirs)
-install(TARGETS sync_vector
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+
 install(TARGETS synch_threads
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -48,6 +44,10 @@ install(TARGETS sync_sequential_execution
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(TARGETS sync_schedule_thread
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(TARGETS scalable_task_processing
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
