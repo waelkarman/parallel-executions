@@ -12,12 +12,12 @@ add_library(ts_vector SHARED ts_vector.hpp)
 set_target_properties(timer PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(ts_vector PROPERTIES LINKER_LANGUAGE CXX)
 
-add_executable(sync_sequential_execution
-    sync_sequential_execution.cpp
+add_executable(sync_threads_one
+    sync_threads_one.cpp
 )
 
-add_executable(sync_schedule_thread
-    sync_schedule_thread.cpp
+add_executable(sync_schedule_threads
+    sync_schedule_threads.cpp
 )
 
 add_executable(scalable_task_processing
@@ -25,8 +25,8 @@ add_executable(scalable_task_processing
     task_scaler.h task_scaler.cpp
 )
 
-add_executable(synch_threads
-    sync_threads.cpp
+add_executable(sync_threads_all
+    sync_threads_all.cpp
 )
 
 target_include_directories(timer PUBLIC

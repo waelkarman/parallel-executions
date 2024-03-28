@@ -5,12 +5,10 @@
 #include <condition_variable>
 
 using namespace std;
+
 /**
- *
- *
- *
- *
- *
+ * run hundred task in hundred different threads
+ * notify all threads together
 */
 
 std::mutex mtx;

@@ -4,12 +4,14 @@
 #include <thread>
 #include "timer.hpp"
 
-/*
+/**
 * Overload a single core.
 * test NUMA arch & asymmetric Cores design
 * Code for Linux
-* Use htop to check core affinity
 * Ref: https://www.gnu.org/software/libc/manual/html_node/CPU-Affinity.html
+*
+* This code snippet supposed to execute a heavy computation on each core of your linux machine sequentially. Use htop to check core affinity.
+*
 */
 
 unsigned long long fibonacci_recursive(int n) {
@@ -33,8 +35,8 @@ void threadlauncher(int cpunum){
     CPU_ZERO(&cpuset);
     CPU_SET(cpunum, &cpuset);
 
-    int result0 = pthread_setaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
-    if (result0 != 0) {
+    int result = pthread_setaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
+    if (result != 0) {
         perror("Error");
     }
 

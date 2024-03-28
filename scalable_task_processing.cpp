@@ -9,7 +9,7 @@
 
 using namespace std;
 
-/*
+/**
  * Thread pool draft
  * threads creation overhead still not managed
  *
