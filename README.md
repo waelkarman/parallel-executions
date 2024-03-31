@@ -1,2 +1,1 @@
-# Thread-safe structures for parallel executions
-Controlled access tests to resources.
+The main goal is to master parallel programming using C++ primitives and OpenMPI
