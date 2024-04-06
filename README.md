@@ -3,6 +3,6 @@ The main goal is to master parallel programming using C++ primitives, POSIX Thre
 
 <img src="doc/screen.gif">
 
-- c++/17 primitives
+- C++/17 primitives
 - POSIX Threads
 - OpenMPI
