@@ -10,7 +10,7 @@
 * Code for Linux
 * Ref: https://www.gnu.org/software/libc/manual/html_node/CPU-Affinity.html
 *
-* This code snippet supposed to execute a heavy computation on each core of your linux machine sequentially. Use htop to check core affinity.
+* This code snippet suppose to execute a heavy computation on each core of your linux machine sequentially. Use htop to check core affinity.
 */
 
 unsigned long long fibonacci_recursive(int n) {
