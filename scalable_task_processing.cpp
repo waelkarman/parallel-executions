@@ -12,6 +12,8 @@ using namespace std;
  * Thread pool draft
  * threads creation overhead still not managed
  *
+ * This code snippet suppose to execute a heavy computation on each available core of your linux machine till all task defined in tasks are over.
+ * Use htop to check core affinity.
 */
 
 std::mutex queue_mutex;
