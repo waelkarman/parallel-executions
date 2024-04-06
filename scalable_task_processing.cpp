@@ -59,7 +59,8 @@ int main() {
             workers.push_back(thread(th_lodable,i,std::ref(tasks)));
             i++;
         }
-        // execution proceed with batches of 20
+
+        
         for(thread& w : workers){
             if(w.joinable()){
                 w.join();
