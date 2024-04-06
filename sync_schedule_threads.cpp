@@ -20,7 +20,7 @@ unsigned long long fibonacci_recursive(int n) {
 
 void* threadFunction(void* arg) {
     Timer t;
-    unsigned long long  res = fibonacci_recursive(46);
+    unsigned long long  res = fibonacci_recursive(44);
     return (void*)res;
 }
 
