@@ -16,6 +16,8 @@ using namespace std;
 */
 
 std::mutex mtx;
+std::mutex queue_mutex;
+
 std::condition_variable cv;
 bool ready = false;
 
