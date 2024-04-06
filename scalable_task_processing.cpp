@@ -26,8 +26,15 @@ unsigned long long fibonacci_recursive(int n) {
 }
 
 void th_lodable(int i, vector<std::function<void(int)>> & tasks){
-    std::function<void(int)> f = tasks.back();
-    tasks.pop_back();
+    std::function<void(int)> f;
+    {
+        std::lock_guard<std::mutex> lock(queue_mutex);
+        if (tasks.empty()){
+            return;
+        }
+        f = tasks.back();
+        tasks.pop_back();
+    }
     f(i);
 }
 
