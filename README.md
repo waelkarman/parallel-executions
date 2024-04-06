@@ -1,5 +1,6 @@
 # parallel programming [in development]
-The main goal is to master parallel programming using C++ primitives and OpenMPI
+The main goal is to master parallel programming using C++ primitives, POSIX Threads and OpenMPI.
 
-- c++/20
+- c++/17 primitives
+- POSIX Threads
 - OpenMPI
