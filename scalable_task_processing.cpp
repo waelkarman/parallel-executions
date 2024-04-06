@@ -3,9 +3,8 @@
 #include <thread>
 #include <mutex>
 #include <vector>
-#include <condition_variable>
-#include "ts_vector.hpp"
 #include <random>
+#include <atomic>
 
 using namespace std;
 
@@ -15,11 +14,8 @@ using namespace std;
  *
 */
 
-std::mutex mtx;
 std::mutex queue_mutex;
-
-std::condition_variable cv;
-bool ready = false;
+std::atomic<int> i(0);
 
 
 unsigned long long fibonacci_recursive(int n) {
@@ -27,7 +23,7 @@ unsigned long long fibonacci_recursive(int n) {
     return fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2);
 }
 
-void th_lodable(int i, vector<std::function<void(int)>> & tasks){
+void th_lodable(int k, vector<std::function<void(int)>> & tasks){
     std::function<void(int)> f;
     {
         std::lock_guard<std::mutex> lock(queue_mutex);
@@ -37,7 +33,8 @@ void th_lodable(int i, vector<std::function<void(int)>> & tasks){
         f = tasks.back();
         tasks.pop_back();
     }
-    f(i);
+    f(k);
+    i--;
 }
 
 int main() {
@@ -54,27 +51,26 @@ int main() {
 
     for(int q=0; q<100; q++){
         int fib = distrib(gen);
-        std::function<void(int)> task = [=](int i){
-            cout << "execute task " << q << " on thread " << i << endl;
+        std::function<void(int)> task = [=](int k){
+            cout << "execute task " << q << " on thread num: "<< k << endl;
             fibonacci_recursive(fib);
         };
 
         tasks.push_back(std::move(task));
     }
 
-    int i = 0;
+    int k(0);
     while(tasks.size()>0){
         while(tasks.size()>0 && i<n){
-            workers.push_back(thread(th_lodable,i,std::ref(tasks)));
+            k++;
+            workers.push_back(thread(th_lodable,k,std::ref(tasks)));
             i++;
         }
+    }
 
-        
-        for(thread& w : workers){
-            if(w.joinable()){
-                w.join();
-                i--;
-            }
+    for(thread& w : workers){
+        if(w.joinable()){
+            w.join();
         }
     }
 
