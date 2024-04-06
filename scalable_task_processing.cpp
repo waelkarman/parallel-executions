@@ -62,7 +62,7 @@ int main() {
 
 
     while(tasks.size()>0){
-        while(tasks.size()>0 && i<n){
+        if(i<n){
             workers.push_back(thread(th_lodable,std::ref(tasks)));
             i++;
         }
