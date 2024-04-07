@@ -8,7 +8,7 @@ using namespace std;
 
 /**
  * run hundred task in hundred different threads
- * notify thread at one
+ * single thread notification
 */
 
 mutex mtx;
