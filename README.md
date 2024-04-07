@@ -9,7 +9,7 @@ The main goal is to master parallel programming using C++ primitives, POSIX Thre
 
 
 Test carried on: 
--   lstopo
--   numactl
+<!-- lstopo --> 
+<!-- numactl -->
 
 <img src="doc/machine.png">
