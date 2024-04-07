@@ -22,7 +22,6 @@ add_executable(sync_schedule_threads
 
 add_executable(scalable_task_processing
     scalable_task_processing.cpp
-    task_scaler.h task_scaler.cpp
 )
 
 add_executable(sync_threads_all
