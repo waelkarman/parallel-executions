@@ -6,7 +6,7 @@
 
 /**
 * Overload a single core.
-* test NUMA arch & asymmetric Cores design
+* test NUMA arch & asymmetric (big.LITTLE) Cores design
 * Code for Linux
 * Ref: https://www.gnu.org/software/libc/manual/html_node/CPU-Affinity.html
 *
