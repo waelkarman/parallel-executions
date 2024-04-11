@@ -24,6 +24,10 @@ add_executable(scalable_task_processing
     scalable_task_processing.cpp
 )
 
+add_executable(producer_consumer
+    producer_consumer.cpp
+)
+
 add_executable(sync_threads_all
     sync_threads_all.cpp
 )
@@ -47,6 +51,10 @@ install(TARGETS sync_schedule_threads
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(TARGETS scalable_task_processing
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(TARGETS producer_consumer
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
