@@ -6,10 +6,6 @@ The main goal is to master parallel programming using C++ primitives, POSIX Thre
 - C++/17 primitives
 - POSIX Threads
 - OpenMPI
-
-
-Test carried on: 
--   lstopo
--   numactl
-
-<img src="doc/machine.png">
+ 
+<!-- lstopo --> 
+<!-- numactl -->
