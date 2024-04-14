@@ -21,7 +21,7 @@ Please build using the following commands:
 
 To run:
 
-> sudo docker run cpp20-runner
+> sudo docker run cpp20-runner ./\<EXECUTABLE NAME\>
 
 To stop the execution find the ID of your container using:
 
