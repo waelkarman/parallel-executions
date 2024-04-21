@@ -31,5 +31,3 @@ To stop:
 
 > sudo docker stop \<CONTAINER ID\>
 
-# Known bug
-- sync_schedule_threads.cpp is not working within the container

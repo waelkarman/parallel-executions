@@ -47,7 +47,7 @@ int main() {
     unsigned int n = std::thread::hardware_concurrency();
     std::cout << "Available Cores: " << n << std::endl;
 
-    for(int i; i<n; i++){
+    for(int i = 0; i<n; i++){
         threadlauncher(i);
     }
 
