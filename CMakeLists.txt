@@ -16,12 +16,12 @@ add_executable(sync_threads_one
     sync_threads_one.cpp
 )
 
-add_executable(sync_schedule_threads
-    sync_schedule_threads.cpp
+add_executable(singlecore_scheduler
+    singlecore_scheduler.cpp
 )
 
-add_executable(scalable_task_processing
-    scalable_task_processing.cpp
+add_executable(thread_pool
+    thread_pool.cpp
 )
 
 add_executable(producer_consumer

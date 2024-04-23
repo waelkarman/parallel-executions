@@ -9,10 +9,9 @@
 using namespace std;
 
 /**
- * Thread pool draft
- * threads creation overhead still not managed
+ * Thread pool
  *
- * This code snippet suppose to execute a heavy computation on each available core of your linux machine till all task defined in tasks are over.
+ * This code snippet suppose to execute a heavy computation on all available core of your linux machine till all task defined in tasks are over.
  * Use htop to check core affinity.
 */
 
@@ -27,16 +26,21 @@ unsigned long long fibonacci_recursive(int n) {
 }
 
 void th_lodable(vector<std::function<void()>> & tasks){
-    std::function<void()> f;
-    {
-        std::lock_guard<std::mutex> lock(queue_mutex);
-        if (tasks.empty()){
-            return;
+    int id = i;
+    while(true){
+        std::function<void()> f;
+        {
+            std::lock_guard<std::mutex> lock(queue_mutex);
+            
+            if (tasks.empty()){
+                return;
+            }
+            f = tasks.back();
+            tasks.pop_back();
+            cout << "Thread " << id << " loaded with task: " << tasks.size() << endl;
         }
-        f = tasks.back();
-        tasks.pop_back();
+        f();
     }
-    f();
     i--;
 }
 
@@ -55,7 +59,6 @@ int main() {
     for(int q=0; q<100; q++){
         int fib = distrib(gen);
         std::function<void()> task = [=](){
-            cout << "execute task " << q << " on thread num: "<< k.fetch_add(1) << endl;
             fibonacci_recursive(fib);
         };
 
