@@ -5,7 +5,7 @@ The main goal is to master parallel programming using C++ primitives, POSIX Thre
 - POSIX Threads
 - OpenMPI
 
-<img src="doc/screen0.gif">
+<img src="doc/screen2.gif">
 
 The gif shows the behaviour implemented into the singlecore_scheduler file as can be seen into htop observing the PID the application is loading creating a thread for each core sequentially. 
 
