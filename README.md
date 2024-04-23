@@ -11,7 +11,7 @@ The gif shows the behaviour implemented into the singlecore_scheduler file as ca
 
 <img src="doc/screen1.gif">
 
-The gif shows the behaviour implemented into the thread_pool file as can be seen into htop the thread PID are always the same to process 100 different tasks.
+The gif shows the behaviour implemented into the thread_pool file as can be seen into htop the thread PID are always the same to process 100 different tasks. Use the same threads avoid the overhead introduced by creation and deletion of the threads.
 
 
 
