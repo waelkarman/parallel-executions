@@ -9,7 +9,7 @@ using namespace std;
 /**
  * This code snippet implements the producer, consumer pattern.
  * As just 2 thread can access to the counter variable in mutual exclusion mode no needs to sinchronize it.
- *
+ * draft 
 */
 
 std::mutex mtx;
@@ -27,16 +27,20 @@ void producer() {
         lock.unlock(); 
         cout << "producer release the lock mtx" << endl;
         
-        std::this_thread::sleep_for(std::chrono::seconds(5)); // move thread to interruptible sleep (S)
+        //std::this_thread::sleep_for(std::chrono::seconds(5)); // move thread to interruptible sleep (S)
     }
 }
 
 void consumer() {
     while(true){
         std::unique_lock<std::mutex> lock(mtx);
-        cout << "consumer release the lock mtx" << endl;
+        cout << "consumer get the lock mtx" << endl;
+        
+        counter--;
+        std::cout << "consumer has consumed the data: " << counter << std::endl;
+        
         cv.wait(lock, []{ //wait release the lock mtx
-            cout << "consumer get the lock mtx" << endl;
+            cout << "consumer released the lock mtx" << endl;
             if(counter>0){
                 cout<<"consumer resume"<<endl;
                 return true;
@@ -45,9 +49,6 @@ void consumer() {
                 return false;
             }
         });
-
-        counter--;
-        std::cout << "consumer has consumed the data: " << counter << std::endl;
     }
 }
 
