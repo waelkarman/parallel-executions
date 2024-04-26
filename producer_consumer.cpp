@@ -7,30 +7,28 @@
 using namespace std;
 
 /**
- * producer consumer
- *
+ * This code snippet implements the producer, consumer pattern.
+ * As just 2 thread can access to the counter variable in mutual exclusion mode no needs to sinchronize it.
  *
 */
 
 std::mutex mtx;
 std::condition_variable cv;
-
 int counter = 0;
-
 
 void producer() {
     while(true){
-        std::unique_lock<std::mutex> lock(mtx); // Acquisisce il lock sul mutex
-        cout << "producer blocca il lock" << endl;
+        std::unique_lock<std::mutex> lock(mtx);
+        cout << "producer get the lock mtx" << endl;
         counter += 1;
 
-        cv.notify_one(); // non sblocca il lock
-        lock.unlock(); // !) leggi sopra
-        cout << "producer sblocca il lock" << endl;
+        cv.notify_one();
+        lock.unlock(); 
+        cout << "producer release the lock mtx" << endl;
 
-        std::cout << "Producer ha inserito il dato: " << counter << std::endl;
+        std::cout << "producer has produced data: " << counter << std::endl;
 
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        std::this_thread::sleep_for(std::chrono::seconds(5)); // move thread to interruptible sleep (S)
     }
 }
 
@@ -39,25 +37,26 @@ void consumer() {
         std::unique_lock<std::mutex> lock(mtx);
         cout << "consumer blocca il lock" << endl;
         cv.wait(lock, []{ //wait sblocca il lock
-            cout << "consumer sblocca il lock" << endl;
+            cout << "consumer get the lock mtx" << endl;
             if(counter>0){
-                cout<<"consumer proceed"<<endl;
+                cout<<"consumer resume"<<endl;
                 return true;
             }else{
                 cout<<"consumer stop"<<endl;
                 return false;
             }
-        }); // Verifica la condizione di consumo
+        });
 
-        std::cout << "Consumer ha consumato il dato: " << counter << std::endl;
+        std::cout << "consumer has consumed the data: " << counter << std::endl;
         counter--;
     }
 }
 
 int main() {
-    std::thread t1(consumer); // il consumer resta in attesa nei prossimo 8 secondi finche un dato non è dispomnibile
+    std::thread t1(consumer);
     std::thread t2(producer);
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    
     t1.join();
     t2.join();
 
