@@ -21,13 +21,12 @@ void producer() {
         std::unique_lock<std::mutex> lock(mtx);
         cout << "producer get the lock mtx" << endl;
         counter += 1;
+        std::cout << "producer has produced data: " << counter << std::endl;
 
         cv.notify_one();
         lock.unlock(); 
         cout << "producer release the lock mtx" << endl;
-
-        std::cout << "producer has produced data: " << counter << std::endl;
-
+        
         std::this_thread::sleep_for(std::chrono::seconds(5)); // move thread to interruptible sleep (S)
     }
 }
@@ -47,8 +46,8 @@ void consumer() {
             }
         });
 
-        std::cout << "consumer has consumed the data: " << counter << std::endl;
         counter--;
+        std::cout << "consumer has consumed the data: " << counter << std::endl;
     }
 }
 
