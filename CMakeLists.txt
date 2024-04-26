@@ -20,8 +20,8 @@ add_executable(sync_threads_one
     ./drafts/sync_threads_one.cpp
 )
 
-add_executable(singlecore_scheduler
-    singlecore_scheduler.cpp
+add_executable(posix_singlecore_scheduler
+    POSIX_singlecore_scheduler.cpp
 )
 
 add_executable(thread_pool
