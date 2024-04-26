@@ -36,7 +36,7 @@ void consumer() {
     while(true){
         std::unique_lock<std::mutex> lock(mtx);
         cout << "consumer blocca il lock" << endl;
-        cv.wait(lock, []{ //wait sblocca il lock
+        cv.wait(lock, []{ //wait release the lock mtx
             cout << "consumer get the lock mtx" << endl;
             if(counter>0){
                 cout<<"consumer resume"<<endl;
