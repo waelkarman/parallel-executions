@@ -1,6 +1,11 @@
 #include <chrono>
 #include <iostream>
 
+/**
+* This code is used to measure the time in Cplus code snippets.
+*
+*/
+
 class Timer {
 public:
     Timer() : start_(std::chrono::high_resolution_clock::now()) {}
