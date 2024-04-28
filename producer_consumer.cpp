@@ -27,7 +27,7 @@ void producer() {
         lock.unlock(); 
         cout << "producer release the lock mtx" << endl;
         
-        //std::this_thread::sleep_for(std::chrono::seconds(5)); // move thread to interruptible sleep (S)
+        std::this_thread::sleep_for(std::chrono::seconds(5)); // move thread to interruptible sleep (S)
     }
 }
 
