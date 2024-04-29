@@ -7,7 +7,7 @@ The main goal is to master parallel programming using C++ primitives, POSIX Thre
 
 <img src="doc/screen2.gif">
 
-The gif shows the behaviour implemented into the singlecore_scheduler file as can be seen into htop observing the PID the application is loading creating a thread for each core sequentially. 
+The gif shows the behaviour implemented into the posix_singlecore_scheduler file as can be seen into htop observing the PID the application is loading creating a thread for each core sequentially. 
 
 <img src="doc/screen1.gif">
 
