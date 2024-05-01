@@ -2,10 +2,9 @@
 #include <omp.h>
 #define NUM_THREADS 2
 /**
- * This code demonstrate the problem of the FAKE SHARING
+ * This code solves the problem of the FAKE SHARING
  * Example of approximation of Pi with parallel programming
- * https://www.youtube.com/watch?v=OuzYICZUthM&list=PLLX-Q6B8xqZ8n8bwjGdzBJ25X2utwnoEG&index=7&ab_channel=OpenMP
- * gcc -fopenmp snippet1.c
+ * gcc -fopenmp snippet1.3
  * Each thread uses local variable and just in the end these local variable are summed in a critical section, this way no fake sharing could occur.
  * And the sum is already synchronized.
 */
