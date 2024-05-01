@@ -4,7 +4,6 @@
 /**
  * This code demonstrate the problem of the FAKE SHARING
  * Example of approximation of Pi with parallel programming
- * https://www.youtube.com/watch?v=OuzYICZUthM&list=PLLX-Q6B8xqZ8n8bwjGdzBJ25X2utwnoEG&index=7&ab_channel=OpenMP
  * gcc -fopenmp snippet1.c
  * 
  * The program uses the number of threads and their ids to split the work and an array as container to join the results afterward. 
