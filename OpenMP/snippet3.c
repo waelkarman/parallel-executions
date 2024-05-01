@@ -4,7 +4,7 @@
 /**
  * This code solves the problem of the FAKE SHARING
  * Example of approximation of Pi with parallel programming
- * gcc -fopenmp snippet1.3
+ * gcc -fopenmp snippet3.c
  * Each thread uses local variable and just in the end these local variable are summed in a critical section, this way no fake sharing could occur.
  * And the sum is already synchronized.
 */
