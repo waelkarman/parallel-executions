@@ -19,5 +19,6 @@ int main ()
     }
     pi = step * sum;
 
+    printf("Value: %f\n",pi);
 }
 
