@@ -4,6 +4,8 @@
  /**
   * The integration of 4 / (1 + x^2) from 0 to 1 is π.
   * 
+  * run it with gcc -fopenmp montecarlo_integration_algorithm.c; ./a.out
+  * 
   * */
 
 static long num_steps = 100000;

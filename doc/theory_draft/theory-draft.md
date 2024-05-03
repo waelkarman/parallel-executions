@@ -132,3 +132,186 @@ Low Level sinchronization:
     - Locks (simple and nested)
 
 Esercizio 3
+Nello snippet 3 il si mostr come usare le primitive omp per risolvere il problema del fake sharing. Attenzione a non sincronizzare all interno dei cicli cosa che risulta particolarmente inefficiente!
+
+
+Fin ora i programmi trattati sono nel paradigma stesso calcolo, dati multipli da dividere sui core.(SPMD)
+
+
+Work Sharing:
+
+->> loop construct
+"#pragma omp for" messo prima di un loop for divide l onere del loop sui thread senza doverlo fare manualemnte splittando il carico con l' id dei thread come fatto prima. In questo modo il codice scritto è molto piu piccolo e leggibile. 
+Bisogna tenere a mente che il compilatore è stupido e che bisogna guidarlo su come splittare il lavoro sul threads.
+Questo di fa con lo scheduling.
+
+- schedule static[chunk size]: le iterazioni in chunk e splitta su diversi threads se metti anche il chunck size, viene fissato il valore dei blocchi e i blocchi di dati vengono assegnati round robin ai thread esistenti. decisioni prese a compile time come gestire i thread 
+
+- schedule dynamic[chunk]: trasforma le iterazioni in task che vengono prese dai thread ed eseguite. Le decisioni prese sono quindi a runtime. Se viene definito il chink si riferisce al numero di iterazioni in blocco.
+
+- schedule guided[chunk]: non used very often 
+
+- schedule runtime: si passa schedule e chunck size a runtime env_variable o runtime library routines.
+
+- schedul auto: è nuovo e si affida al compilatore per prendere tutte le decisione per le massime performance 
+
+schedule e dinamy cono i piu usati .
+
+-> Static: quando posso predire il carico per singola iterazione.
+-> dynamic: quando non so quanto l'iterazione puo impiegare in termini di tempo.
+
+Sintatticamente bisogna creare un blocco #pragma omp parallel{} e all interno di esso #pragma omp for. OMP supporta sintatticamente la sintassi unita #pragma omp parallel for che fa la stessa cosa.
+
+
+Tutto quel che è stato visto fin ora suppone che i cicli in un loop siano del tutto indipendenti. 
+
+Vediamo ora il caso di dipendenze fra iterazioni nel cicli.
+
+In alcuni casi queste dipendenze possino essere riscritt in modo che non vi siano dipendenze per esempio :
+
+int i, j, A[MAX];
+j = 5;
+for (i=0; i<MAX; i++) {
+    j += 2;
+    A[i] = big(i);
+}
+
+puo essere riscritto in : 
+
+int i, j, A[MAX];
+#pragma omp parallel for
+for (i=0; i<MAX; i++) {
+    int j = 5 + 2*(i+1);
+    A[i] = big(i);
+}
+
+
+Quindi la soluzione è :
+-> trovare gli elementi di dipendenza. 
+-> riscrivere il codice in modo che le singole iterazioni siano del tutto indipendenti 
+-> usare il costrutto #pragma omp parallel for
+
+Introduciamo il concetto di "reduction" utilizzando il calcolo del valor medio.
+La "reduction" nella programmazione parallela è un concetto utilizzato per combinare i risultati ottenuti da diversi thread o processi in modo da ottenere un risultato unico.
+risultato dato da valori accumulati leggendo i dati magari da una struttura dati e poi combinando i risultati.
+
+double sum=0.0,A[MAX]; int i;
+for (i=0; i<MAX; i++) {
+    sum += A[i];
+}
+sum = sum/MAX;
+
+
+Nell esempio la somma totale è data dalla combinazione delle somme parziali calcolate dai singoli thread in caso si voglia eseguire questo codice su piu thread.
+
+
+Per usare la reduction con OMP devi aggiungere allo statement reduction e fra parentesi la variabile risultatte dalla riduzione e l'operazione di combinazione .
+
+Questo approccio crea una copia della variabile definita come riduzione per ogni thread e inizializzala con l identità dell operazione che dovrà essere fatta. per esempio 0 per l operatore + e cosi via:
+
+il codice diventa : 
+
+double ave=0.0, A[MAX]; int i;
+#pragma omp parallel for reduction(+:ave)
+for (i=0; i<MAX; i++) {
+    ave += A[i];
+}
+ave = ave/MAX;
+
+Tabella operatori identità supportati per la riduzione: 
+![Tabella Operatori identità](image-8.png)
+
+Esercizio 4
+prendi lo snippet1 del pi e con for e reduction calcola pi
+
+
+![Risultato in comparazione con i prcedenti](image-9.png)
+
+4.1 
+test delle diverse possibilità di scheduling
+
+
+
+Where Barriers are implied and where explicit ? 
+
+
+->punto di creazione threads
+#pragma omp parallel shared (A, B, C) private(id)
+{
+    id=omp_get_thread_num();
+    A[id] = big_calc(id);
+    #pragma omp barrier
+    #pragma omp for
+    for(i=0; i<N; i++) {
+        C[i] = big_calc3(i, A);
+    }
+    #pragma omp for nowait
+    for(i=0; i<N; i++) {
+        B[i] = big_calc2(C, i);
+        A[id] = big_calc4(id);
+    } -> non avrebbe senso mettere una barriera qui perchè i thread subito dopo saranno cancellati quindi perchè tenerli attivi in attesa ? 
+}
+-> punto do collasso threads 
+
+Alla fine di un costrutto parallelo di loop c'è una barrieta imlicita perche è la soluzione piu sicura tuttavia queste possono essere bypassate se esplicitmante specificato per aumentare le prestazioni se lo si fa in modo sicuro ma è responsabilità del programmatore farlo esplicitamente.
+
+si fa con "#pragma omp for nowait" alla in inizio del loop come nel caso del secondo loop visto che non vengono usati i prodotti calcolati all interno del ciclo.
+
+
+#pragma omp barrier è invece una barriera esplicita che non c'è modo di bypassare.
+
+
+essite un costrutto che si chiama master :
+#pragma omp master
+{
+    questo codice verrà eseguito solo dal master
+}
+non c'è sincronizzazione gli altri thread continuano quello che stavano facendo 
+
+#pragma omp parallel
+{
+    do_many_things();
+    #pragma omp master
+    {
+        exchange_boundaries();
+    }
+    #pragma omp barrier --> se voglio che gli altri thread aspettino per vedere il risultato calcolato dal master
+    do_many_other_things();
+}
+
+single invece ha sincronizzazione.
+
+#pragma omp single
+{
+    il primo che è libero farà questo lavoro
+}
+
+
+#pragma omp parallel
+{
+    do_many_things();
+    #pragma omp sigle
+    {
+        exchange_boundaries();
+    } ---> implied barrier
+    do_many_other_things();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+- sections/Section construct
+- single contruct
+- task construct
+
+
+
+
