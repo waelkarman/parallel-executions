@@ -140,6 +140,11 @@ Fin ora i programmi trattati sono nel paradigma stesso calcolo, dati multipli da
 
 Work Sharing:
 
+
+- sections/Section construct
+- single contruct
+- task construct
+
 ->> loop construct
 "#pragma omp for" messo prima di un loop for divide l onere del loop sui thread senza doverlo fare manualemnte splittando il carico con l' id dei thread come fatto prima. In questo modo il codice scritto è molto piu piccolo e leggibile. 
 Bisogna tenere a mente che il compilatore è stupido e che bisogna guidarlo su come splittare il lavoro sul threads.
@@ -359,23 +364,139 @@ for(i=0; i<NBUCKETS; i++){
 }
 
 
+Library routines:
+
+Esistono diverse runtime library che supportano openMP quello che succede è che quando si usano le direttive pragma si dice al compilatore di fare qualcosa per conto nostro. quindi qualcosa che accade a tempo di compilazione ma esistono anche delle cose che succedono a tempo di runtime per forza e quindi parte della runtime library routines alcune di queste le abbiamo già viste come epr esempio: 
+
+- omp_get_num_threads()
+- omp_set_num_threads()
+- omp_get_thread_num()
+- omp_get_max_threads()
+
+esiste un altra funzione che ti dice se  ti trovi in una parallel reagion oppure no.
+
+Questa funzionalità è importante in quei contesti dove ho una funzione che puo essere chiamata in un contesto parallelo o no in modo da adattarne il comportamento.
+tale funzione è omp_in_parallel()
+
+Setta la modalità dinamica di gestione dei thread.
+omp_set_dynamic()
+omp_get_dynamic()
+omp_num_procs()
+quando si scrive un algoritmo non si sà dove andrà a girare oltretutto per diversi motivi è possibile che la modalità dinamica crei diverse moli di thread in funzione di troppe cose e quindi raccogliere informazioni e disabilitare dinamicamente la modalità dinamica è importante per garantire che per esempio esiste un thread per ogni core.
+
+esempio:
+
+
+
+#include <omp.h>
+void main()
+{
+    int num_threads;
+    omp_set_dynamic(0);  --> disabilita la modalità dinamica
+    omp_set_num_threads(omp_num_procs());
+    #pragma omp parallel
+    {
+        int id=omp_get_thread_num(); --> questa istruzione va messa qui e non dopo la set perche nella set un thread è in esecuzione perche si sta fuori dalla regone parallela
+        #pragma omp single
+        num_threads = omp_get_num_threads();
+        do_lots_of_stuff(id);
+    }
+}
+
+ENVIRONMENT VARIABLES:
+
+servono a cambiare il comportamento di un programma senza ricompilarlo:
+
+- OMP_NUM_THREAD=int_literal: quanti thread uso di default
+
+In produzione è sempre meglio lasciare queste decisioni alle varibili di ambiente.
+
+Quando si lancia un programma multi thread questo inizia a creare thread che occupano spazio nello stack con le loro variabili locali che possono crescere indefinitamente. questo può portare alla saturazione della memoria e a far collassare l intero sistema operativo. 
+è possibile creare un thread dichiarando a priori una dimensione da allocare nello stack e questo si fa con la variblie:
+
+OMP_STACKSIZE: che dice quanto spazio occorre per poter creare un thread
+
+OMP_WAIT_POLICY: quando si è in presenza di barriere o locks si è detto che i thread aspettano il loro turno. esistono diverse policy per la gestione di questa attesa:
+principalmente:
+-> ACTIVE: corrisponde ad uno spinlocks che consuma risorse
+-> PASSIVE: muovi il thread a SLEEP
+
+Sospendere un thread e riprenderlo è oneroso quindi se si sa che si attenderà poco allora forse è meglio non sospenderlo. come nel caso di un istogramamma.
+
+
+OMP_PROC_BIND=TRUE/FALSE: in genere non si ha a che fare con sisitemi SMP ma con sisitemi NUMA e questa opzione permette di eseguire un bind del thread sul core in modo che non venga spostato su un altro thread questo evita che si finisca in una situazione in cui i dati vengano caricati sulla mamoria piu vicina ad un core e poi il thread venga passato su un altro core aumentando i tempi di risposta della mamoria specialemnte se molti sono i dati da tenere il cache. In caso contrario il movemnto verso un thread piu libero non è una cattiva idea.
+
+
+
+Storage attributes:
+
+SHARED
+PRIVATE
+FIRSTPRIVATE
+LASTPRIVATE
+DEFAULT(PRIVATE|SHARED|NONE):comportamento di default desiderato quindi una modifica del valore di default se imposto NONE invece il compilatore esige che sia specificato esplicitamnte quindi buono per debuggare
+
+Il default non in C non è applicabile(?)7:00 vid 12
+
+
+Vediamo ora un esempio SBAGLIATO dell uso di queste clausole:
+
+
+void wrong() {
+    int tmp = 0;
+    #pragma omp parallel for private(tmp)
+    for (int j = 0; j < 1000; ++j)
+        tmp += j;
+    printf("%d\n", tmp);
+}
+
+
+private su tmp crea copie locali ma non inizializza il valore di tmp !!
+oltretutto se stampo dopo la regione parallela il valore di tmp torna ad essere zero perche si ritorna al contesto precedente
+
+
+il problema dell inizializzazione si risolve con l uso di firstprivate esempio :
+
+incr = 0;
+#pragma omp parallel for firstprivate(incr)
+for (i = 0; i < MAX; i++) {
+    if ((i % 2) == 0) incr++;
+    A[i] = incr;
+}
+
+nel codice il calore di incr è inizializzato al valore globale 
+
+Invece lastprivate prende il valore dell ultima iterazione del loop prima del collasso dei thread e lo copia nello scope globale
+esempio:
+
+
+void sq2(int n, double *lastterm)
+{
+    double x; int i;
+    #pragma omp parallel for lastprivate(x)
+    for (i = 0; i < n; i++) {
+        x = a[i]*a[i] + b[i]*b[i];
+        b[i] = sqrt(x);
+    }
+    *lastterm = x;
+}
+
+
+La stessa variabile in multiple clausole non va messa eccetto un caso:
+L' unico caso di applicazione di clausole multiple è in cooperazione con firstprivate e lastprivate.
+
+combinazioni possibili: 
+- private e lastprivate 
+- prstprivate e lastprivate
+
+7:00 vid 12
+
+ESERCIZIO 5
 
 
 
 
 
-SPMD : single program multiple data  code (?)
-
-
-
-
-
-
-
-
-- sections/Section construct
-- single contruct
-- task construct
 
 
 
