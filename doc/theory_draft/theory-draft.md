@@ -277,14 +277,14 @@ non c'è sincronizzazione gli altri thread continuano quello che stavano facendo
     }
     #pragma omp barrier --> se voglio che gli altri thread aspettino per vedere il risultato calcolato dal master
     do_many_other_things();
-}
+} ---> implied barrier and thread destruction
 
 single invece ha sincronizzazione.
 
 #pragma omp single
 {
     il primo che è libero farà questo lavoro
-}
+} ---> implied barrier and thread destruction
 
 
 #pragma omp parallel
@@ -295,11 +295,76 @@ single invece ha sincronizzazione.
         exchange_boundaries();
     } ---> implied barrier
     do_many_other_things();
+} ---> implied barrier and thread destruction
+
+no wait puo essere usata anche con "#pragma omp single" e il programmatore si prende la responsabilita 
+in genere i costrutti i work sharing hanno una barriera alla fine del blocco per default
+
+
+
+Costrutto SECTIONS :
+
+Non usato molto ma vediamo il costrutto section
+esistono sections plural e sections sigle :
+permette di creare sezioni di codice da assegnare ad un thread o ad un altro e così via.
+
+esempio:
+
+#pragma omp parallel
+{
+    #pragma omp sections
+    {
+        #pragma omp section
+        x_calculation();
+        #pragma omp section
+        y_calculation();
+        #pragma omp section
+        z_calculation();
+    }
+}
+
+
+l assegnazione dei thread è automatica non manualmente assegnata. Ogni sezione è assegnata ad un thread separato.
+
+COSTRUTTO PER LA SINCRONIZZAZIONE A Bsso livello 
+LOCKS ROUTINES:
+
+- omp_init_lock()
+- omp_set_lock()
+- omp_test_lock() utile per non aspettare perche la set è bloccante
+- omp_unset_lock()
+- omp_destoy_lock()
+
+
+Per spiegare l' uso del lock passiamo ad un problema pratico supponiamo di avere un istogramma. e di voler eseguire un update di questo istogramma in modo efficiente. 
+Potremmo definire un lock per ogni elemento dell' istogramma e aggiornare ogni singolo elemento separatamente deifnendo un lock per ciascun elmento. un esecmpio di questo comportamento è riportato nel codice seguente:
+
+
+#pragma omp parallel for
+for(i=0; i<NBUCKETS; i++){
+    omp_init_lock(&hist_locks[i]);
+    hist[i] = 0;
+}
+
+#pragma omp parallel for
+for(i=0; i<NVALS; i++){
+    ival = (int) sample(arr[i]);
+    omp_set_lock(&hist_locks[ival]);
+    hist[ival]++;
+    omp_unset_lock(&hist_locks[ival]);
+}
+
+for(i=0; i<NBUCKETS; i++){
+    omp_destroy_lock(&hist_locks[i]);
 }
 
 
 
 
+
+
+
+SPMD : single program multiple data  code (?)
 
 
 
