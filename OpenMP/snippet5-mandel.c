@@ -42,7 +42,6 @@ int main(){
 
   #pragma omp parallel for default(shared) private(c) 
     for (i=0; i<NPOINTS; i++) {
-      #pragma omp parallel for default(shared) private(c) 
       for (j=0; j<NPOINTS; j++) {
         c.r = -2.0+2.5*(double)(i)/(double)(NPOINTS)+eps;
         c.i = 1.125*(double)(j)/(double)(NPOINTS)+eps;
