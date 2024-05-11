@@ -494,8 +494,41 @@ combinazioni possibili:
 ESERCIZIO 5
 
 osservazioni 
-- i è automaticamente prvato ma non j all interno 
+- i è automaticamente privato ma non j nel secondo for
 - 
+
+
+
+UNIT 4 TASKS
+
+![alt text](image-10.png)
+
+Un task è un concetto generale è un unità di lavoro. che vienen creata e messa in una coda per poter essere eseguita appena sia possibile. possibilmente tutti insieme.
+Un task è composto da:
+- del codice
+- dei dati 
+- delle variabili di controllo (numero di thread ecc)
+
+In openmp ci sono delle funzioni che definiscono l ambiente di esecuzione 
+Il binding dell ambiente in cui si esegue il codice non avviene a livello di thread ma a livello di task.
+
+#pragma omp task 
+
+#pragma omp taskwait
+
+
+
+snippet 8 
+
+![alt text](image-11.png)
+
+
+ADVANCED TOPIC:
+FORMAL MEMORY MODEL OF OPEN MP
+
+18
+
+
 
 
 
