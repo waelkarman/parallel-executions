@@ -493,7 +493,9 @@ combinazioni possibili:
 
 ESERCIZIO 5
 
-
+osservazioni 
+- i è automaticamente prvato ma non j all interno 
+- 
 
 
 
