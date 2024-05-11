@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
    struct node *temp=NULL;
    struct node *head=NULL;
    struct node *r=NULL;
+   struct node *k=NULL;
 
    printf("Process linked list\n");
    printf("  Each linked list node will be processed by function 'processwork()'\n");
@@ -78,30 +79,56 @@ int main(int argc, char *argv[]) {
  
    p = init_list(p);
    head = p;
-   r = p;
-   int count = 0;
-   start = omp_get_wtime();
-   // {
-   //    while (p != NULL) {
-   //       processwork(p);
-   //       p = p->next;
-   //    }
-   // }
-
-   {
-      while (r != NULL) {
-         count++;
-         r = r->next;
+   int algo = 2,count = 0;
+   
+   if (algo == 0){
+      start = omp_get_wtime();
+      {
+         while (p != NULL) {
+            processwork(p);
+            p = p->next;
+         }
       }
+      end = omp_get_wtime();
+   }else if (algo == 1){
+      start = omp_get_wtime();
+      {
+         r = head;
+         while (r != NULL) {
+            count++;
+            r = r->next;
+         }
 
-      #pragma omp parallel for
-      for(int j=0; j<count; j++){
-         processworkinparallel(p, j);
+         #pragma omp parallel for
+         for(int j=0; j<count; j++){
+            processworkinparallel(p, j);
+         }
       }
+      end = omp_get_wtime();
+   }else if (algo == 02){
+
+      start = omp_get_wtime();
+      {
+         k=head;
+         while (k != NULL) {
+            count++;
+            k = k->next;
+         }
+         
+         struct node* arr[count];
+         k=head;
+         for(int i=0; i<count;i++){
+            arr[i] = k;
+            k = k->next;
+         }
+
+         #pragma omp parallel for
+         for(int j=0; j<count; j++){
+            processwork(arr[j]);
+         }
+      }
+      end = omp_get_wtime();
    }
-   end = omp_get_wtime();
-
-
 
    p = head;
    while (p != NULL) {
@@ -112,7 +139,7 @@ int main(int argc, char *argv[]) {
    }  
    free (p);
 
-   printf("Compute Time: %f seconds\n", end - start);
+   printf("Compute Time for algo %d : %f seconds\n",algo, end - start);
 
    return 0;
 }
