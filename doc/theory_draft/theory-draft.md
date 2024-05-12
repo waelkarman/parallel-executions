@@ -1,11 +1,7 @@
-W = CV^2
-POWER = W*f
-POWER = CV^2f
-
 Concurrency: a condition of a system in which multiple tasks are logically active at one time 
 Parallelism: a condition of system in which multiple tasks are active at one time
 
-risolvere un sisitema line are (puo non essere concorrente ma puo usare il parallelismo per eseguire il compito piu velocemente.)
+risolvere un sisitema lineare (puo non essere concorrente ma puo usare il parallelismo per eseguire il compito piu velocemente.)
 vs 
 web server (concurrent by default)
 
