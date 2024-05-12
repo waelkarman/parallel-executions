@@ -633,4 +633,7 @@ COMPARISONS:
 ![alt text](image-14.png)
 
 
-
+All new informations is www.openmp.org
+Book:
+- using openMP
+- Patterns for parallel programming
