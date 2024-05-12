@@ -526,7 +526,67 @@ snippet 8
 ADVANCED TOPIC:
 FORMAL MEMORY MODEL OF OPEN MP
 
-18
+Describes the detail rules for the consistency of the data seen by each thread in time.
+ha a che fare con thread che condividono dati e ci lavorano sopra
+
+![alt text](image-12.png)
+
+supponiamo che il processore 1 vuole il valore della variabile "a" quale vedrà il processore 1 ? 
+
+preso un programma ci interessa l' ordine di lettura scrittura e il loro ordine questo perche il compilatore riordina queste operazioni per una questione di ottimizzazione. 
+
+Il compilatore non sa parallelizzare il codice ma sa riorganizzare le linee di codice.
+
+ora lo lancio su una macchina che lavora con piu core e thread e quello che succede è che a seconda dello stato della macchian queste operazioni nei thread vengono sospese con i thread e riesumate e quindi l ordine è davvero molto complesso da poter stabilire. Questo perche è il sisitema operativo a runtime accende e spegne thread dopo che il compilatore ha generato il codice ordinato ottimizzato.
+
+quindi esisite l ordine del codice
+quello del compilatore e 
+quello di esecuzione effettiva
+
+Quando si parla di regole di consistenza della memoria non si intende solo la lettura del valore della cache pittosto che dalla dram.
+
+Quindi questa branca ti da le regole e gli stumenti per controllare l ordine di uqeste esecuzioni.
+ordine di 
+Read
+Write
+Sinchronization
+
+definisce se e quando il compilatore può eseguire ottimizzazione rispetto a queste 3 operazioni.
+
+Sequential consistency:
+ è quello che pensi avvenga nell esecuzione del programma l ordine di RWS in cui io li ho messi nel mio programma e tutti i thread vedo tutto nell ordine definito da me.
+
+ma questo riduce drasticamnete le prestazioni del mio computer.
+
+La soluzione migliore è detta 
+Relaxed SEQ Concistancy: 
+openMP supporta quest ultima. pupo cambiare per isngolo thread le istruzioni ma non lo puoi fare con l operazione di sisnchronizzazione. 
+
+you cant change R and W on a single threads (?)
+
+-> you cant move thngs around a sinchronization operation.
+
+the sync operation of which we speack about is flush
+
+at this point (the flush one) you are guaranteed to see a consistent view of memory for the flush set that is the collection of variable that flush take as argument id you dont give any argument is making consistent all the memory.
+
+before and anfter flush the compiler can reorder the operations to optimize.
+
+this are the rule of the relaxed consistency. 
+
+#pragma omp flush (variable)
+
+That sound like a fenze but flush most of the time is equivalent to a fence.
+
+from thread perspective my view now available no anyone else not a global sinchronization
+
+implicit total flush already defined in OpenMP 
+- enter exit parallel reagion = flush
+- also at any implicit explicit barrier
+- enter exit critical reagion
+- whenever a lock is set or unset
+
+
 
 
 
