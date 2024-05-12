@@ -586,13 +586,51 @@ implicit total flush already defined in OpenMP
 - enter exit critical reagion
 - whenever a lock is set or unset
 
+Supponiamo di voler evitare il flush di tutte le variabile e di volerli mettere solo a quelle variabili utili.
+il compilatore puo  dire che il flush set non overlaps altre variabili che vengono spostate prima cambiando l ordine delle istruzioni assunto al momento della stesura del programma 
+Quindi attenzione che il compilatore puo riordinare le istruzioni attorno al flush se queste non overlappano il flush set
 
 
+exercise 8 (INCOMPLETE)
+Regarded producer consumer with open mp 
 
 
+20
+
+Global variable i want it private in each thread and initialized differently :
+
+- THREADPRIVARE
+- COPIIN 
+
+int counter = 0;
+#pragma omp threadprivate(counter)
+
+int increment_counter()
+{
+    counter++;
+    return (counter);
+}
 
 
+exercise random gen
 
+
+end.
+
+
+IDEAS: 
+FUndamental design pattern for parallel programming
+main parallel program patterns
+-> SPMD: create several thread and make decision and fix behaviour withrespect to process ID and - used in NUMA
+-> Loop parallelism: start from data in a for loop make loops independant and use for loops using also reductions
+-> divide and conquer: have a method to divide in sub problems solving it within tasks (if big enough) and recombine the results to get the final answer
+
+![alt text](image-13.png)
+
+
+COMPARISONS:
+
+![alt text](image-14.png)
 
 
 
